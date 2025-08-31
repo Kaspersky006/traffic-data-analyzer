@@ -16,3 +16,10 @@ Built as a student project to practice Python programming, testing, and CI/CD.
 src/traffic_analyzer/ → main source code
 tests/ → test files and sample data
 .github/workflows/ → CI/CD pipeline
+
+## Run with CLI:
+python -m traffic_analyzer.cli tests/data/sample/traffic_sample.txt --hour 8
+
+## Run Test:
+pytest
+
