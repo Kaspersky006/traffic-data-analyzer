@@ -87,11 +87,25 @@ pytest
 
 ## Continuous Integration
 
-This project uses **GitHub Actions** to automatically:
+This project includes two CI pipeline examples:
 
-* Install project dependencies
-* Execute unit tests
-* Verify that every push to the repository passes all tests
+### GitHub Actions
+
+GitHub Actions automatically:
+
+- Installs project dependencies
+- Runs unit tests with pytest
+- Verifies that each push passes successfully
+
+### Jenkins
+
+A `Jenkinsfile` is included to demonstrate a basic Jenkins CI pipeline with the following stages:
+
+- Checkout
+- Install dependencies
+- Run tests
+- Build simulation
+- Deploy simulation
 
 ---
 
