@@ -1,7 +1,7 @@
 import os
 from traffic_analyzer import core
 
-sample_file = os.path.join(os.path.dirname(__file__), "data/sample/traffic_sample.txt")
+sample_file = "tests/data/sample/traffic_sample.csv"
 
 def test_maximum_traffic():
     assert core.maximum_traffic(sample_file) >= 0
