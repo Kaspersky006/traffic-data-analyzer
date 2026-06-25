@@ -1,54 +1,66 @@
-def average_cars_per_hour(filepath, hour):
-    count = 0
-    line_counter = 0
-    with open(filepath, "r") as file:
-        for line in file:
-            if line[:2] == str(hour).zfill(2):
-                line_counter += 1
-                count += line.count(">")
-    return count / line_counter if line_counter else 0
+from pathlib import Path
 
 
-def nm_of_empty_measurements(filepath):
-    nm_of_empty_lines = 0
-    nm_of_lines = 0
-    with open(filepath, "r") as file:
-        for line in file:
-            nm_of_lines += 1
-            if ">" not in line:
-                nm_of_empty_lines += 1
-    return nm_of_empty_lines / nm_of_lines if nm_of_lines else 0
+def read_lines(filepath: str) -> list[str]:
+    """Read traffic data from a file and return all lines."""
+    return Path(filepath).read_text().splitlines()
 
 
-def maximum_traffic(filepath):
-    maximum_nm_of_cars = 0
-    with open(filepath, "r") as file:
-        for line in file:
-            num_of_cars = line.count(">")
-            if num_of_cars > maximum_nm_of_cars:
-                maximum_nm_of_cars = num_of_cars
-    return maximum_nm_of_cars
+def average_cars_per_hour(filepath: str, hour: int) -> float:
+    """Calculate the average number of cars for a selected hour."""
+    lines = read_lines(filepath)
+    selected_hour = str(hour).zfill(2)
+
+    hourly_lines = [line for line in lines if line.startswith(selected_hour)]
+
+    if not hourly_lines:
+        return 0.0
+
+    total_cars = sum(line.count(">") for line in hourly_lines)
+    return total_cars / len(hourly_lines)
 
 
-def nm_of_jams(filepath):
-    jam_number = 0
-    with open(filepath, "r") as file:
-        for line in file:
-            jam_number += line.count(">>>")
-    return jam_number
+def nm_of_empty_measurements(filepath: str) -> float:
+    """Calculate the ratio of measurements without any cars."""
+    lines = read_lines(filepath)
+
+    if not lines:
+        return 0.0
+
+    empty_lines = sum(1 for line in lines if ">" not in line)
+    return empty_lines / len(lines)
 
 
-def longest_jam(filepath):
-    long_jam = 0
-    with open(filepath, "r") as file:
-        for line in file:
-            current_streak = 0
-            for char in line:
-                if char == ">":
-                    current_streak += 1
-                    long_jam = max(long_jam, current_streak)
-                else:
-                    current_streak = 0
-    return long_jam
+def maximum_traffic(filepath: str) -> int:
+    """Find the maximum number of cars in a single measurement."""
+    lines = read_lines(filepath)
+
+    if not lines:
+        return 0
+
+    return max(line.count(">") for line in lines)
 
 
+def nm_of_jams(filepath: str) -> int:
+    """Count traffic jams, where a jam is three or more cars in a row."""
+    lines = read_lines(filepath)
+    return sum(line.count(">>>") for line in lines)
+
+
+def longest_jam(filepath: str) -> int:
+    """Find the longest continuous traffic jam."""
+    lines = read_lines(filepath)
+
+    longest_streak = 0
+
+    for line in lines:
+        current_streak = 0
+
+        for char in line:
+            if char == ">":
+                current_streak += 1
+                longest_streak = max(longest_streak, current_streak)
+            else:
+                current_streak = 0
+
+    return longest_streak
