@@ -123,7 +123,7 @@ This project helped me practice:
 
 ---
 
-## Future Improvements
+
 
 * Generate graphical traffic reports
 * Export analysis results to PDF
